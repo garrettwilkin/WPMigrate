@@ -43,12 +43,18 @@ def main():
         post_id = int(sys.argv[1])
         post_ids = wp_posts.select().where(wp_posts.ID == post_id)
         for post in post_ids:
-            print post.ID, post.post_content
+            print "ID: {}".format( post.ID)
+            print "BEFORE :" + post.post_content
+            after = post.post_content.decode('string_escape')
+            print "AFTER :" + after
+            post.post_content = after
+            post.save()
     else:
         print "Current published post_ids."
         post_ids = wp_posts.select().where(wp_posts.post_status == "publish")
         for post in post_ids:
-            print post.ID, post.post_content
+            print "ID: " + post.ID
+            print "CONTENT :" + post.post_content
 
 if __name__ == "__main__":
     main()
