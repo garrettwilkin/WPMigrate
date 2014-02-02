@@ -39,13 +39,16 @@ class wp_posts(BaseModel):
 
 def main():
     print sys.argv
-    if (sys.argv[1] > 0):
-      post_id = int(sys.argv[1])
+    if (len(sys.argv) > 1 and sys.argv[1] > 0):
+        post_id = int(sys.argv[1])
+        post_ids = wp_posts.select().where(wp_posts.ID == post_id)
+        for post in post_ids:
+            print post.ID, post.post_content
     else:
-      print "must supply post_id."
-    post_ids = wp_posts.select()
-    for post in post_ids:
-        print post.ID
+        print "Current published post_ids."
+        post_ids = wp_posts.select().where(wp_posts.post_status == "publish")
+        for post in post_ids:
+            print post.ID, post.post_content
 
 if __name__ == "__main__":
     main()
