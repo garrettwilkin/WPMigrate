@@ -11,13 +11,13 @@ class BaseModel(Model):
     class Meta:
         database = khon
 
-class Post(BaseModel):
+class wp_posts(BaseModel):
     ID = BigIntegerField()
     post_author = BigIntegerField()
     post_date = DateTimeField()
     post_date_gmt = DateTimeField()
     post_content = TextField()
-    post_title = TestField()
+    post_title = TextField()
     post_category = IntegerField()
     post_excerpt = TextField()
     post_status = CharField(20)
@@ -43,6 +43,9 @@ def main():
       post_id = int(sys.argv[1])
     else:
       print "must supply post_id."
+    post_ids = wp_posts.select()
+    for post in post_ids:
+        print post.ID
 
 if __name__ == "__main__":
     main()
