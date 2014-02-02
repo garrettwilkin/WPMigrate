@@ -39,7 +39,29 @@ class wp_posts(BaseModel):
 
 def main():
     print sys.argv
-    if (len(sys.argv) > 1 and sys.argv[1] > 0):
+    print len(sys.argv)
+    if (len(sys.argv) > 2 and sys.argv[1] > 0):
+        if (sys.argv[2] == "-t"):
+            post_id = int(sys.argv[1])
+            post_ids = wp_posts.select().where(wp_posts.ID == post_id)
+            for post in post_ids:
+                print "ID: {}".format( post.ID)
+                print "BEFORE :" + post.post_content
+                after = post.post_content.decode('string_escape')
+                print "AFTER :" + after
+                post.post_content = after
+                print "JUST A TEST"
+        elif (sys.argv[2] == "-all"):
+            post_id = int(sys.argv[1])
+            post_ids = wp_posts.select().where(wp_posts.post_status == "publish")
+            for post in post_ids:
+                print "ID: {}".format( post.ID)
+                print "BEFORE :" + post.post_content
+                after = post.post_content.decode('string_escape')
+                print "AFTER :" + after
+                post.post_content = after
+                post.save()
+    elif (len(sys.argv) > 1 and sys.argv[1] > 0):
         post_id = int(sys.argv[1])
         post_ids = wp_posts.select().where(wp_posts.ID == post_id)
         for post in post_ids:
@@ -52,9 +74,12 @@ def main():
     else:
         print "Current published post_ids."
         post_ids = wp_posts.select().where(wp_posts.post_status == "publish")
+        published = []
         for post in post_ids:
-            print "ID: " + post.ID
+            print "ID: {}".format( post.ID)
             print "CONTENT :" + post.post_content
+            published.append(post.ID)
+        print "Published post_id list: {}".format(published)
 
 if __name__ == "__main__":
     main()
